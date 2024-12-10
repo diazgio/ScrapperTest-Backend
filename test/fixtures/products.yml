@@ -1,0 +1,39 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  description: MyText
+  size_tag: MyString
+  size_description: MyString
+  normal_price: 1
+  discount: 1
+  raitings: 1
+  reviews: 1
+  raitings_average: 1.5
+  gender: MyString
+  purpose: MyString
+  material: MyString
+  features: MyString
+  color: MyString
+  model_product_name: MyString
+  product_type: MyString
+  image_links: MyString
+
+two:
+  title: MyString
+  description: MyText
+  size_tag: MyString
+  size_description: MyString
+  normal_price: 1
+  discount: 1
+  raitings: 1
+  reviews: 1
+  raitings_average: 1.5
+  gender: MyString
+  purpose: MyString
+  material: MyString
+  features: MyString
+  color: MyString
+  model_product_name: MyString
+  product_type: MyString
+  image_links: MyString
