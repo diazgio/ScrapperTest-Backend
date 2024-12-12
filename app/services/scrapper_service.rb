@@ -24,41 +24,26 @@ class ScrapperService
     size_tag = browser.a(class: "CDDksN zmLe5G dpZEpc").text rescue ""
 
     details = extract_details(browser)
-    size_description = details[:size_description]
-    gender = details[:gender]
-    purpose = details[:purpose]
-    material = details[:material]
-    features = details[:features]
-    color = details[:color]
-    model_product_name = details[:model_product_name]
-    product_type = details[:product_type]
 
     image_links = browser.ul(class: 'ZqtVYK').lis.map do |li|
       li.img(class: '_0DkuPH').src rescue nil
     end.compact
+    
+    browser.close
 
-    Product.create!(
+    product_data ={
       title: title,
       description: description,
       size_tag: size_tag,
-      size_description: size_description,
-      discounted_price: discounted_price,
       normal_price: normal_price,
       discount: discount,
       raitings_reviews: raitings_reviews,
       raitings_average: raitings_average,
-      gender: gender,
-      purpose: purpose,
-      material: material,
-      features: features,
-      color: color,
-      model_product_name: model_product_name,
-      product_type: product_type,
+      product_details: details.map(&:to_json),
       image_links: image_links
-    )
-    
-    browser.close
-    puts "Producto guardado exitosamente."
+    }
+    puts product_data
+    product_data
   rescue => e
     puts "Error al procesar: #{e.message}"
     browser.close
@@ -69,31 +54,39 @@ class ScrapperService
   def extract_details(browser)
     parent_container = browser.div(class: 'row IbygeN')
     raise "Contenedor padre no encontrado" unless parent_container.exists?
-
+  
     expand_icon = browser.div(class: 'col col-1-12 cWwIYq')
     if expand_icon.exists?
       expand_icon.click
-      sleep 10
-      browser.wait_until(timeout: 10) { browser.div(class: 'sBVJqn _8vsVX1').exists? }
+      sleep 5
+      
+      read_more = browser.button(class: 'QqFHMw n4gy8q')
+      read_more.click if read_more.exists?
+      sleep 5
+      browser.wait_until(timeout: 10) { browser.div(class: 'sBVJqn').exists? }
     end
-
-    details_container = browser.div(class: 'sBVJqn _8vsVX1')
+  
+    details_container = browser.div(class: 'sBVJqn')
     raise "Contenedor de detalles no encontrado" unless details_container.exists?
-
+  
     rows = details_container.divs(class: 'row')
-    
-    {
-      size_description: rows[0]&.div(class: 'col col-9-12 -gXFvC')&.text&.strip || "",
-      gender: rows[1]&.div(class: 'col col-9-12 -gXFvC')&.text&.strip || "",
-      purpose: rows[2]&.div(class: 'col col-9-12 -gXFvC')&.text&.strip || "",
-      material: rows[3]&.div(class: 'col col-9-12 -gXFvC')&.text&.strip || "",
-      features: rows[4]&.div(class: 'col col-9-12 -gXFvC')&.text&.strip || "",
-      color: rows[5]&.div(class: 'col col-9-12 -gXFvC')&.text&.strip || "",
-      model_product_name: rows[6]&.div(class: 'col col-9-12 -gXFvC')&.text&.strip || "",
-      product_type: rows[7]&.div(class: 'col col-9-12 -gXFvC')&.text&.strip || "",
-    }
+  
+    product_details = rows.map do |row|
+      key_element = row.div(class: 'col col-3-12 _9NUIO9')
+      value_element = row.div(class: 'col col-9-12 -gXFvC')
+  
+      if key_element.exists? && value_element.exists?
+        {
+          product_key: key_element.text.strip,
+          product_value: value_element.text.strip
+        }
+      else
+        nil
+      end
+    end.compact
+  
+    product_details
   end
-
 end
 
 
