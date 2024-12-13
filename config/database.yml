@@ -11,7 +11,22 @@ test:
   database: scrapper_test_backend_test
 
 production:
-  url: <%= ENV['DATABASE_URL'] %>
-  adapter: postgresql
-  encoding: unicode
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  primary: &primary_production
+    <<: *default
+    url: <%= ENV["DATABASE_URL"] %>
+    database: scrapper_test_backend_production
+    username: scrapper_test_backend
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+    password: <%= ENV["SCRAPPER_TEST_BACKEND_DATABASE_PASSWORD"] %>
+  cache:
+    <<: *primary_production
+    database: scrapper_test_backend_production_cache
+    migrations_paths: db/cache_migrate
+  queue:
+    <<: *primary_production
+    database: scrapper_test_backend_production_queue
+    migrations_paths: db/queue_migrate
+  cable:
+    <<: *primary_production
+    database: scrapper_test_backend_production_cable
+    migrations_paths: db/cable_migrate
