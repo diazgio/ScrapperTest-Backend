@@ -2,7 +2,8 @@ class Api::V1::ProductsController < ActionController::API
 
   def index
     @products = Product.all
-    render json: @products
+
+    render json: @products.map { |product| ProductSerializer.new(product).serializable_hash }
   end
 
   def show
