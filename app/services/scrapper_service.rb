@@ -6,7 +6,8 @@ class ScrapperService
   end
 
   def scrape_and_save
-    browser = Watir::Browser.new :chrome
+    browser = Watir::Browser.new :chrome, options: { binary: '/usr/bin/chromium-browser' }
+
     browser.goto(@url)
 
     browser.wait_until(timeout: 30) do
