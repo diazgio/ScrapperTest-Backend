@@ -1,5 +1,4 @@
 require 'watir'
-require 'webdrivers'
 
 class ScrapperService
   def initialize(url)
@@ -7,15 +6,8 @@ class ScrapperService
   end
 
   def scrape_and_save
-    Selenium::WebDriver::Chrome::Service.driver_path = '/usr/local/bin/chromedriver'
 
-    browser = Watir::Browser.new(
-    :chrome,
-    options: {
-      binary: '/usr/bin/chromium-browser',
-      args: %w[headless disable-gpu no-sandbox disable-dev-shm-usage]
-    }
-  )
+    browser = Watir::Browser.new(:chrome)
 
     browser.goto(@url)
 
