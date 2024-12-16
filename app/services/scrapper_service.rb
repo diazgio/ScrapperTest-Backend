@@ -57,7 +57,7 @@ class ScrapperService
     parent_container = browser.div(class: 'row IbygeN')
     raise "Contenedor padre no encontrado" unless parent_container.exists?
   
-    expand_icon = browser.div(class: 'col col-1-12 cWwIYq')
+    expand_icon = browser.div(class: 'col col-11-12 rYpYQA')
     if expand_icon.exists?
       expand_icon.click
       sleep 5

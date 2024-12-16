@@ -1,9 +1,9 @@
 class Api::V1::ProductsController < ActionController::API
 
   def index
-    @products = Product.select(:id, :title, :discounted_price, :normal_price, :raitings_reviews, :raitings_average)
+    @products = Product.select(:id, :title, :discounted_price, :normal_price, :raitings_reviews, :raitings_average, :image_links)
   
-    render json: @products.as_json(only: [:id, :title, :discounted_price, :normal_price, :raitings_reviews, :raitings_average])
+    render json: @products.as_json(only: [:id, :title, :discounted_price, :normal_price, :raitings_reviews, :raitings_average, :image_links])
   end
   
   def show
